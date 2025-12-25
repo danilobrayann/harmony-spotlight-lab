@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Menu, X, Music } from "lucide-react";
+import { Menu, X, Music, Sun, Moon } from "lucide-react";
 
 const navLinks = [
   { href: "#inicio", label: "Início" },
@@ -12,6 +12,7 @@ const navLinks = [
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,6 +21,28 @@ export function Navigation() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    // Check for saved theme or system preference
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    
+    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+      setIsDark(true);
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    setIsDark(!isDark);
+    if (!isDark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
 
   return (
     <motion.header
@@ -59,6 +82,22 @@ export function Navigation() {
               {link.label}
             </a>
           ))}
+          
+          {/* Dark Mode Toggle */}
+          <button
+            onClick={toggleDarkMode}
+            className={`rounded-full p-2 transition-all hover:bg-primary/10 ${
+              isScrolled ? "text-foreground" : "text-primary-foreground"
+            }`}
+            aria-label="Toggle dark mode"
+          >
+            {isDark ? (
+              <Sun className="h-5 w-5" />
+            ) : (
+              <Moon className="h-5 w-5" />
+            )}
+          </button>
+          
           <a
             href="#matricula"
             className="rounded-full bg-primary px-6 py-2 font-body text-sm font-medium text-primary-foreground transition-all hover:scale-105 hover:shadow-glow"
@@ -68,19 +107,34 @@ export function Navigation() {
         </div>
 
         {/* Mobile Menu Button */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className={`md:hidden ${
-            isScrolled ? "text-foreground" : "text-primary-foreground"
-          }`}
-          aria-label="Menu"
-        >
-          {isMobileMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            onClick={toggleDarkMode}
+            className={`rounded-full p-2 transition-all ${
+              isScrolled ? "text-foreground" : "text-primary-foreground"
+            }`}
+            aria-label="Toggle dark mode"
+          >
+            {isDark ? (
+              <Sun className="h-5 w-5" />
+            ) : (
+              <Moon className="h-5 w-5" />
+            )}
+          </button>
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className={`${
+              isScrolled ? "text-foreground" : "text-primary-foreground"
+            }`}
+            aria-label="Menu"
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Menu */}
