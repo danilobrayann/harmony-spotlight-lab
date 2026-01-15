@@ -3,7 +3,7 @@ import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Youtube } from "lucide
 
 export function Footer() {
   return (
-    <footer id="contato" className="bg-foreground text-primary-foreground">
+    <footer id="contato" className="bg-navy text-primary-foreground">
       {/* CTA Section */}
       <section id="matricula" className="bg-primary py-16">
         <div className="container mx-auto px-4 text-center">
