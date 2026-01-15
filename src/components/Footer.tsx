@@ -20,19 +20,47 @@ export function Footer() {
               Inscreva-se agora e descubra o músico que existe em você.
               Vagas limitadas!
             </p>
-            <form className="mx-auto mt-8 flex max-w-md flex-col gap-4 sm:flex-row">
-              <input
-                type="email"
-                placeholder="Seu melhor e-mail"
-                className="flex-1 rounded-full bg-primary-foreground/10 px-6 py-4 font-body text-primary-foreground placeholder:text-primary-foreground/60 backdrop-blur-sm transition-all focus:bg-primary-foreground/20 focus:outline-none"
-              />
+            <div className="mx-auto mt-8 max-w-2xl">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <input
+                  type="text"
+                  placeholder="Seu nome"
+                  id="enrollment-name"
+                  className="w-full rounded-full bg-primary-foreground/10 px-6 py-4 font-body text-primary-foreground placeholder:text-primary-foreground/60 backdrop-blur-sm transition-all focus:bg-primary-foreground/20 focus:outline-none"
+                />
+                <select
+                  id="enrollment-course"
+                  className="w-full rounded-full bg-primary-foreground/10 px-6 py-4 font-body text-primary-foreground backdrop-blur-sm transition-all focus:bg-primary-foreground/20 focus:outline-none cursor-pointer appearance-none"
+                  defaultValue=""
+                >
+                  <option value="" disabled className="text-foreground">Selecione o curso</option>
+                  <option value="Piano" className="text-foreground">Piano</option>
+                  <option value="Violão" className="text-foreground">Violão</option>
+                  <option value="Violino" className="text-foreground">Violino</option>
+                  <option value="Canto" className="text-foreground">Canto</option>
+                  <option value="Bateria" className="text-foreground">Bateria</option>
+                  <option value="Teoria Musical" className="text-foreground">Teoria Musical</option>
+                </select>
+              </div>
               <button
-                type="submit"
-                className="rounded-full bg-primary-foreground px-8 py-4 font-body font-medium text-foreground transition-all hover:scale-105 hover:shadow-lg"
+                onClick={() => {
+                  const name = (document.getElementById('enrollment-name') as HTMLInputElement).value;
+                  const course = (document.getElementById('enrollment-course') as HTMLSelectElement).value;
+                  if (!name || !course) {
+                    alert('Por favor, preencha seu nome e escolha um curso!');
+                    return;
+                  }
+                  const message = encodeURIComponent(`Olá! Gostaria de me matricular no curso de ${course} na Harmony Spotlight Lab. Meu nome é ${name}.`);
+                  window.open(`https://wa.me/551112345678?text=${message}`, '_blank');
+                }}
+                className="mt-6 w-full rounded-full bg-primary-foreground px-8 py-4 font-body font-bold text-primary transition-all hover:scale-105 hover:shadow-glow flex items-center justify-center gap-2"
               >
-                Quero Me Matricular
+                Matricular via WhatsApp 🚀
               </button>
-            </form>
+              <p className="mt-4 text-xs text-primary-foreground/60">
+                Ao clicar, você será redirecionado para o nosso WhatsApp.
+              </p>
+            </div>
           </motion.div>
         </div>
       </section>
